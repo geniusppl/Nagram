@@ -258,7 +258,7 @@ android {
             multiDexEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             matchingFallbacks = ["release", "debug"]
-            signingConfig signingConfigs.release
+            signingConfig (keystorePwd ? signingConfigs.release : signingConfigs.debug)
         }
     }
 
