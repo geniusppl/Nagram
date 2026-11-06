@@ -101,6 +101,29 @@ public class ApplicationLoader extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         try {
+            final Context hkCtx = base;
+            final Thread.UncaughtExceptionHandler hkPrev = Thread.getDefaultUncaughtExceptionHandler();
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+                try {
+                    java.io.StringWriter sw = new java.io.StringWriter();
+                    e.printStackTrace(new java.io.PrintWriter(sw));
+                    android.content.ContentValues cv = new android.content.ContentValues();
+                    cv.put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, "nagram-crash-" + System.currentTimeMillis() + ".txt");
+                    cv.put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+                    cv.put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, "Download/");
+                    android.net.Uri u = hkCtx.getContentResolver().insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, cv);
+                    if (u != null) {
+                        java.io.OutputStream os = hkCtx.getContentResolver().openOutputStream(u);
+                        os.write(("thread=" + t.getName() + "\n" + sw).getBytes());
+                        os.close();
+                    }
+                } catch (Throwable ignore) {
+                }
+                if (hkPrev != null) hkPrev.uncaughtException(t, e);
+            });
+        } catch (Throwable ignore) {
+        }
+        try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
         }
