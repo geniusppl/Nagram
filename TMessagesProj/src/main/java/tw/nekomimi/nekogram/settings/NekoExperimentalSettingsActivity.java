@@ -561,7 +561,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             cellGroup.rows.remove(localPremiumRow);
             cellGroup.rows.remove(localQuoteColorRow);
             cellGroup.rows.remove(externalGhostModeRow);
-            cellGroup.rows.remove(enhancedFileLoaderRow);
             cellGroup.rows.remove(disableFilteringRow);
             cellGroup.rows.remove(unlimitedFavedStickersRow);
             cellGroup.rows.remove(unlimitedPinnedDialogsRow);
